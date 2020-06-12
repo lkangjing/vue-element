@@ -1,32 +1,82 @@
 <template>
-  <div class="amap-page-container">
-    <el-amap-search-box class="search-box" :search-option="searchOption" :on-search-result="onSearchResult" />
-    <el-amap vid="amapDemo" :center="mapCenter" :zoom="12" class="amap-demo">
-      <el-amap-marker v-for="marker in markers" :position="marker.position" />
-    </el-amap>
+  <div class="amap-wrapper" :style="'max-height:450px;'">
+    <div class="amap-page-container">
+      <el-amap-search-box class="search-box" :search-option="searchOption" :on-search-result="onSearchResult" />
+      <el-amap vid="amapDemo" :center="mapCenter" :zoom="12" class="amap-demo">
+        <!-- 地图标记点 -->
+        <el-amap-marker v-for="(marker,i) in markers" :key="i" :position="marker.position" :events="marker.events" />
+        <!-- 信息弹窗 -->
+        <el-amap-info-window
+          v-if="window"
+          :position="window.position"
+          :visible="window.visible"
+          :content="window.content"
+        >
+          <el-amap-info-window />
+        </el-amap-info-window></el-amap>
+    </div>
   </div>
 </template>
 <script>
 module.exports = {
   data: function() {
     return {
-      markers: [
-        [121.59996, 31.197646],
-        [121.40018, 31.197622],
-        [121.69991, 31.207649]
-      ],
+      //   markers: [
+      //     { position: [121.59996, 31.197646] },
+      //     { position: [121.40018, 31.197622] },
+      //     { position: [121.69991, 31.207649] }
+      //   ],
       searchOption: {
         city: '上海',
         citylimit: true
       },
-      mapCenter: [121.59996, 31.197646]
+      mapCenter: [121.59996, 31.197646],
+      windows: [],
+      markers: [],
+      window: ''
     }
   },
+  mounted() {
+    const markers = []
+    const windows = []
+
+    const num = 4
+    const self = this
+
+    for (let i = 0; i < num; i++) {
+      markers.push({
+        position: [121.59996, 31.197646 + i * 0.001],
+        events: {
+          click() {
+            self.windows.forEach(window => {
+              window.visible = false
+            })
+
+            self.window = self.windows[i]
+            self.$nextTick(() => {
+              self.window.visible = true
+            })
+          }
+        }
+      })
+
+      windows.push({
+        position: [121.59996, 31.197646 + i * 0.001],
+        // content: `<div class="prompt">${i}+河南省郑州市<a>链接<a/></div>`,
+        content: `<div class="prompt">
+                                <span class="prompt-span"><a href="/#/company/` + i + `">` + i + `</a></span>
+                                <p class="prompt-p">` + i + `</p>
+                                </div>`,
+        visible: false
+      })
+    }
+
+    this.markers = markers
+    this.windows = windows
+  },
   methods: {
-    addMarker: function() {
-      const lng = 121.5 + Math.round(Math.random() * 1000) / 10000
-      const lat = 31.197646 + Math.round(Math.random() * 500) / 10000
-      this.markers.push([lng, lat])
+    handleClick() {
+      console.log('点击了弹窗')
     },
     onSearchResult(pois) {
       let latSum = 0
@@ -63,6 +113,14 @@ module.exports = {
         margin: 50px;
         width: 50%;
       position: relative;
+    }
+    .prompt {
+        position: relative;
+        display: inline-block;
+      background: white;
+      width: 200px;
+      height: 60px;
+      text-align: center;
     }
   </style>
 

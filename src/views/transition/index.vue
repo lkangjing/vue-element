@@ -4,13 +4,17 @@
       <div class="test" />
     </div>
     <button @click="start">动画</button>
-
+    <img src="../../assets/404_images/arrow.jpg" alt="" @click="handleImg">
+    <div class="anniu" />
+    <div class="anniu" />
+    <div class="anniu" />
     <div class="anniu" />
   </div>
 </template>
 
 <script>
 export default {
+  // 测试git
   data() {
     return {
 
@@ -19,6 +23,9 @@ export default {
   methods: {
     start() {
 
+    },
+    handleImg() {
+      console.log('点击了图片')
     }
   }
 }
