@@ -22,6 +22,7 @@
       <el-table-column
         prop="amount1"
         label="数值 1（元）"
+        :formatter="formatSex"
       />
       <el-table-column
         prop="amount2"
@@ -80,14 +81,14 @@ export default {
       tableData: [{
         id: '12987122',
         name: '王小虎',
-        amount1: '234',
+        amount1: '2344564565',
         amount2: '3.2',
         amount3: 10
       },
       {
         id: '12987123',
         name: '王小虎',
-        amount1: '165',
+        amount1: '1657897.23656',
         amount2: '4.43',
         amount3: 12
       }, {
@@ -112,6 +113,12 @@ export default {
     }
   },
   methods: {
+    // 格式化数字
+    formatSex(row, column) {
+      console.log(row.amount1, column)
+      //   var c = (row.amount1.toString().indexOf('.') !== -1) ? row.amount1.toLocaleString() : row.amount1.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      return Math.round(row.amount1).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+    },
     exportExcel() {
       /* generate workbook object from table */
       var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))

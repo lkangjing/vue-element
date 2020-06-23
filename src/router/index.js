@@ -102,6 +102,12 @@ export const constantRoutes = [
         name: 'Transition',
         component: () => import('@/views/transition/index'),
         meta: { title: 'Transition', icon: 'table' }
+      },
+      {
+        path: 'weather',
+        name: 'weather',
+        component: () => import('@/views/weather/index'),
+        meta: { title: 'weather', icon: 'table' }
       }
     ]
   },
